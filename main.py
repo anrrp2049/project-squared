@@ -6,8 +6,9 @@ import os
 #    #folder  #file name        #function name
 from programs.utilities.calculator import calculator
 from programs.misc.hello import hello
-from programs.misc.words import word
 from programs.games.rpg import rpg
+from programs.games.quizGame import quizGame
+from programs.misc.HelloWorld import helloWorld
 
 #Catagories for programs:
 catagories = ["Miscellaneous",
@@ -15,37 +16,38 @@ catagories = ["Miscellaneous",
               "Games"]
 
 #add your imported function here:
-misc = [hello, 
-        word]
+misc = [hello, helloWorld]
 
 utilities = [calculator]
 
-games = [rpg]
+games = [rpg, quizGame]
 
 def main():
-    #clear screen
     while (True):
-        # Choose Catagory
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear_screen()
 
+        # Choose Catagory
         print("Choose a catagory: \n")
 
         #show all catagory options
         for i, option in enumerate(catagories):
             print(f'{i+1}. {option}\n')
 
-        print(f'{len(catagories)+1}. Back\n')
-
         #validate input is in range
-        catagory = get_input(catagories)
+        choice = -1
+        while choice >= len(catagories) or choice < 0:
+            try:
+                choice = int(input(f'(1-{len(catagories)}): ')) - 1
+            except ValueError:
+                continue
         
-        # Choose Program
         clear_screen()
         
+        # Choose Program
         print("Choose a program: \n")
 
         programs = None
-        match (catagory):
+        match (choice):
             case 0:              
                 programs = misc
             case 1:
@@ -56,34 +58,26 @@ def main():
         #show all programs options in catagory
         for i, option in enumerate(programs):
             print(f'{i+1}. {option.__name__}.py\n')
+
+        print(f'{len(programs)+1}. Back\n')
         
-
         #validate input is in range
-        program = get_input(programs)
+        choice = -1
+        while choice > len(programs) or choice < 0:
+            try:
+                choice = int(input(f'(1-{len(programs)+1}): ')) - 1
+            except ValueError:
+                continue
 
-        if (program == len(programs)):
+        if choice == len(programs):
             continue
 
         clear_screen()
 
-        programs[program]()
+        programs[choice]()
 
         return
 
-def get_input(options, back=False):
-    choice = -1
-    while choice > len(options) or choice < 0:
-        try:
-            choice = int(input(f'(1-{len(options)}): ')) - 1
-            if back:
-                return 
-
-        except ValueError:
-            continue
-    
-    
-    return choice
-        
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
